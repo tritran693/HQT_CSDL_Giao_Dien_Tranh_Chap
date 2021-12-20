@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author VT <ninhviettient4cbl@gmail.com>
+ * @author trisu
  */
 public class KhachHangXemHoaDon extends javax.swing.JFrame {
 
