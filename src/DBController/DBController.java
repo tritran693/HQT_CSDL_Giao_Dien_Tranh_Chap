@@ -6,6 +6,7 @@
 package DBController;
 
 import Class.DoiTac;
+import Class.DonHang;
 import Class.SanPhamDoiTac;
 import DBConnection.DBConnection;
 import java.sql.Connection;
@@ -87,6 +88,34 @@ public class DBController {
                 int dongia = rs.getInt("DonGia");
                 SanPhamDoiTac dt = new SanPhamDoiTac(ten, mota,dongia);
                 list.add(dt);
+            }
+        }catch (SQLException ex) {
+            Logger.getLogger(DBController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    public static ArrayList<DonHang> getDonHang(String makh) {
+        ArrayList<DonHang> list = new ArrayList<>();
+        Connection conn = null;
+        try{
+            conn = DBConnection.getConnection();
+            Statement hd = conn.createStatement();
+            ResultSet rs = hd.executeQuery("select MaDH, NgayDatHang, TinhTrang, MaTX, HinhThucThanhToan, DiaChi, PhiVanChuyen, PhiSanPham, ,TongTien from DonDH where makh = MaKH");
+            while(rs.next()){
+                String madh = rs.getString("MaDH");
+                String ngaydat = rs.getString("NgayDatHang");
+                String tinhtrang = rs.getString("TinhTrang");
+                String matx = rs.getString("MaTX");
+                String hinhthucthanhtoan = rs.getString("HinhThucThanhToan");
+                String diachinhan = rs.getString("DiaChi");
+                int phivanchuyen = rs.getInt("PhiVanChuyen");
+                int phisanpham = rs.getInt("PhiSanPham");
+                int tongtien = rs.getInt("TongTien");
+                
+                DonHang dh;
+                dh = new DonHang(madh, ngaydat, tinhtrang, matx, hinhthucthanhtoan, diachinhan, phivanchuyen, phisanpham, tongtien);
+                list.add(dh);
             }
         }catch (SQLException ex) {
             Logger.getLogger(DBController.class.getName()).log(Level.SEVERE, null, ex);
