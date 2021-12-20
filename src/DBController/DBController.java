@@ -101,7 +101,7 @@ public class DBController {
         try{
             conn = DBConnection.getConnection();
             Statement hd = conn.createStatement();
-            ResultSet rs = hd.executeQuery("select MaDH, NgayDatHang, TinhTrang, MaTX, HinhThucThanhToan, DiaChi, PhiVanChuyen, PhiSanPham, ,TongTien from DonDH where makh = MaKH");
+            ResultSet rs = hd.executeQuery("select MaDH, NgayDatHang, TinhTrang, MaTX, HinhThucThanhToan, DiaChi, PhiVanChuyen, PhiSanPham, ,TongTien from DonDH where MaKH = 'KH01' ");
             while(rs.next()){
                 String madh = rs.getString("MaDH");
                 String ngaydat = rs.getString("NgayDatHang");
