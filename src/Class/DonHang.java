@@ -7,7 +7,7 @@ package Class;
 
 /**
  *
- * @author ninhviettient4cbl@gmail.com
+ * @author VT <ninhviettient4cbl@gmail.com>
  */
 public class DonHang {
     private String madh;
