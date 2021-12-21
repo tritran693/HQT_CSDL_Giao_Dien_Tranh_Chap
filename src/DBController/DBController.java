@@ -112,7 +112,7 @@ public class DBController {
                 int phivanchuyen = rs.getInt("PhiVanChuyen");
                 int phisanpham = rs.getInt("PhiSanPham");
                 int tongtien = rs.getInt("TongTien");
-                
+                 
                 DonHang dh;
                 dh = new DonHang(madh, ngaydat, tinhtrang, matx, hinhthucthanhtoan, diachinhan, phivanchuyen, phisanpham, tongtien);
                 list.add(dh);
