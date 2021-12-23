@@ -122,8 +122,34 @@ public class DBController {
         }
         return list;
     }
+    
+     public static ArrayList<DonHang> getAllDonHang() throws SQLException{
+        ArrayList<DonHang> list = new ArrayList<>();
         
-    
-    
+        Connection conn = DBConnection.getConnection();
+        try{
+            Statement hd = conn.createStatement();
+            ResultSet rs = hd.executeQuery("SELECT * FROM DonDH");
+            while(rs.next()){
+                String madh = rs.getString("MaDH");
+                String ngaydat= rs.getString("NgayDatHang");
+                String tinhtrang = rs.getString("TinhTrang");
+                String matx = rs.getString("MaTX");
+                String hinhthucthanhtoan = rs.getString("HinhThucThanhToan");
+                String diachinhan = rs.getString("DiaChiThanhToan");
+                int phivanchuyen = rs.getInt("PhiVanChuyen");
+                int phisanpham = rs.getInt("PhiSanPham");
+                int tongtien = rs.getInt("TongTien");
+                
+                DonHang dh;
+                dh = new DonHang(madh, ngaydat, tinhtrang, matx, hinhthucthanhtoan, diachinhan, phivanchuyen, phisanpham, tongtien);
+                list.add(dh);
+            }
+        }catch (SQLException ex) {
+            Logger.getLogger(DBController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+        
     
 }
