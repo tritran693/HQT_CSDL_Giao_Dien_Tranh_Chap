@@ -8,11 +8,12 @@ import Class.DonHang;
 import DBController.DBController;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
 
 /**
  *
@@ -23,8 +24,13 @@ public class TinhTrangDH extends javax.swing.JFrame {
     /**
      * Creates new form TinhTrangDH
      */
+   
+    private int selectedIndex;
+    ArrayList<DonHang> list = null;
+
     public TinhTrangDH() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -38,7 +44,7 @@ public class TinhTrangDH extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbResult = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
@@ -46,7 +52,7 @@ public class TinhTrangDH extends javax.swing.JFrame {
 
         jLabel1.setText("TÌNH TRẠNG ĐƠN HÀNG");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbResult.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -54,7 +60,7 @@ public class TinhTrangDH extends javax.swing.JFrame {
                 "Mã đơn hàng", "Ngày đặt hàng", "Tình trạng", "Mã tài xế", "Hình thức thanh toán", "Địa chỉ nhận", "Phí vận chuyển", "Phí sản phẩm", "Tổng tiền"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbResult);
 
         jButton1.setText("Sửa");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -109,6 +115,23 @@ public class TinhTrangDH extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        
+        try {
+            list = DBController.getAllDonHang();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        selectedIndex = tbResult.getSelectedRow();
+        if (list.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Không có đơn hàng nào");
+        }else if(selectedIndex==-1){
+            JOptionPane.showMessageDialog(rootPane, "Không có đơn hàng nào!!!");
+        }
+        else{   
+            SuaDH suaDH = new SuaDH(this,rootPaneCheckingEnabled);
+        suaDH.setVisible(true);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -123,16 +146,15 @@ public class TinhTrangDH extends javax.swing.JFrame {
         model.addColumn("Phí vận chuyển");
         model.addColumn("Phí sản phẩm");
         model.addColumn("Tổng tiền");
-        ArrayList<DonHang> list = null;
         try {
             list = DBController.getAllDonHang();
         } catch (SQLException ex) {
             Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        for(DonHang hd:list){
+        for (DonHang hd : list) {
             model.addRow(hd.toArray());
         }
-        jTable1.setModel(model);
+        tbResult.setModel(model);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -175,6 +197,6 @@ public class TinhTrangDH extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tbResult;
     // End of variables declaration//GEN-END:variables
 }
