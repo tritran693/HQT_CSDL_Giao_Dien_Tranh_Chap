@@ -5,7 +5,10 @@
 package Frames;
 
 import Class.DonHang;
+import DBConnection.DBConnection;
 import DBController.DBController;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +24,47 @@ import javax.swing.table.DefaultTableModel;
  */
 public class TinhTrangDH extends javax.swing.JFrame {
 
+    public static boolean updateTinhTrang(String tinhtrang, String madh) {
+         try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "UPDATE DonDH SET TinhTrang=? WHERE MaDH=?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, tinhtrang);
+            preparedStatement.setString(2, madh);
+            
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DBController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
     /**
      * Creates new form TinhTrangDH
      */
    
     private int selectedIndex;
+    private DefaultTableModel tblModel;
     ArrayList<DonHang> list = null;
 
     public TinhTrangDH() {
         initComponents();
         this.setLocationRelativeTo(null);
+        tblModel=(DefaultTableModel) tbResult.getModel();
+    }
+     public void addDH(DonHang dh){
+        list.add(dh);
+        tblModel.setRowCount(0);//reset nd trong bang ve 0
+        for(DonHang donhang:list){
+            tblModel.addRow(new Object[]{donhang.getMadh(),donhang.getNgaydat(),
+            donhang.getTinhtrang(),donhang.getMatx(),donhang.getHinhthucthanhtoan(),
+            donhang.getDiachinhan(),donhang.getPhivanchuyen(),
+            donhang.getPhisanpham(),donhang.getTongtien()});
+        }
     }
 
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -115,22 +147,17 @@ public class TinhTrangDH extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
-        try {
-            list = DBController.getAllDonHang();
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(JFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
         selectedIndex = tbResult.getSelectedRow();
         if (list.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Không có đơn hàng nào");
         }else if(selectedIndex==-1){
-            JOptionPane.showMessageDialog(rootPane, "Không có đơn hàng nào!!!");
+            JOptionPane.showMessageDialog(rootPane, "Vui lòng chọn đơn hàng để sửa");
         }
         else{   
             SuaDH suaDH = new SuaDH(this,rootPaneCheckingEnabled);
-        suaDH.setVisible(true);
+            suaDH.setEditData(list.get(selectedIndex));
+            suaDH.setVisible(true);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
