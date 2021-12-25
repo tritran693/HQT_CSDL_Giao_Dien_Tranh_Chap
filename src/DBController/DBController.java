@@ -184,14 +184,14 @@ public class DBController {
         try{
             conn = DBConnection.getConnection();
             Statement hd = conn.createStatement();
-            ResultSet rs = hd.executeQuery("select MaDH, NgayDatHang, TinhTrang, MaTX, HinhThucThanhToan, DiaChi, PhiVanChuyen, PhiSanPham, ,TongTien from DonDH where MaKH = 'KH01' ");
+            ResultSet rs = hd.executeQuery("select MaDH, NgayDatHang, TinhTrang, MaTX, HinhThucThanhToan, DiaChiThanhToan, PhiVanChuyen, PhiSanPham ,TongTien from DonDH where MaKH = 'KH01' ");
             while(rs.next()){
                 String madh = rs.getString("MaDH");
                 String ngaydat = rs.getString("NgayDatHang");
                 String tinhtrang = rs.getString("TinhTrang");
                 String matx = rs.getString("MaTX");
                 String hinhthucthanhtoan = rs.getString("HinhThucThanhToan");
-                String diachinhan = rs.getString("DiaChi");
+                String diachinhan = rs.getString("DiaChiThanhToan");
                 int phivanchuyen = rs.getInt("PhiVanChuyen");
                 int phisanpham = rs.getInt("PhiSanPham");
                 int tongtien = rs.getInt("TongTien");
