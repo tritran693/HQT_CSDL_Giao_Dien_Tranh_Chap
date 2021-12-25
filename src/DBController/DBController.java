@@ -5,6 +5,7 @@
  */
 package DBController;
 
+import Class.ChiTietSanPhamChiNhanh;
 import Class.DoiTac;
 import Class.DonHang;
 import Class.SanPhamDoiTac;
@@ -43,6 +44,26 @@ public class DBController {
         }
     }
     
+        public static boolean insert_SP_CN(String masp, String tensp, String mota, int soluong, int dongia, String macn){
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "exec THEM_SP_CN ?,?,?,?,?,?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, masp);
+            preparedStatement.setString(2, tensp);
+            preparedStatement.setString(3, mota);
+            preparedStatement.setString(4, macn);
+            preparedStatement.setInt(5, soluong);
+            preparedStatement.setInt(6, dongia);
+            
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DBController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+    
     public static ArrayList<DoiTac> getTenDoiTac(){
         ArrayList<DoiTac> list = new ArrayList<>();
         Connection conn = null;
@@ -54,8 +75,8 @@ public class DBController {
                 String id = rs.getString("MaDT");
                 String ten = rs.getString("TenDoiTac");
                 
-                DoiTac hoadon = new DoiTac(id,ten);
-                list.add(hoadon);
+                DoiTac dt = new DoiTac(id,ten);
+                list.add(dt);
             }
         }catch (SQLException ex) {
             Logger.getLogger(DBController.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,15 +91,15 @@ public class DBController {
             conn = DBConnection.getConnection();
             Statement hd = conn.createStatement();
             String query;
-            if(maDT == "all"){
-                query = "select sp.TenSanPham, sp.MoTa, ct.DonGia from CT_SanPham_ChiNhanh ct, SanPham sp where sp.MaSP = ct.MaSP";
+            if(maDT == null){
+                query = "exec DanhSachSanPham null";
             }
             else {
-                query = "select sp.TenSanPham, sp.MoTa, ct.DonGia from CT_SanPham_ChiNhanh ct, SanPham sp, ChiNhanh cn, DoiTac dt where sp.MaSP = ct.MaSP and ct.MaCN = cn.MaCN and cn.MaDT = dt.MaDT and dt.TenDoiTac=?";
+                query = "exec DanhSachSanPham ?";
             
             }
             PreparedStatement preparedStatement = conn.prepareStatement(query);
-            if(maDT != "all"){
+            if(maDT != null){
                 preparedStatement.setString(1, maDT);
             }
             ResultSet rs = preparedStatement.executeQuery();
@@ -91,6 +112,68 @@ public class DBController {
             }
         }catch (SQLException ex) {
             Logger.getLogger(DBController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+        
+        public static ArrayList<SanPhamDoiTac> getSpDoiTac(String maDT, int low, int high){
+        ArrayList<SanPhamDoiTac> list = new ArrayList<>();
+        Connection conn = null;
+        try{
+            conn = DBConnection.getConnection();
+            Statement hd = conn.createStatement();
+            String query;
+            if(maDT == null){
+                query = "exec LocTheoGia ?,?, null";
+            }
+            else {
+                query = "exec LocTheoGia ?,?,?";
+            
+            }
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setInt(1, low);
+            preparedStatement.setInt(2, high);
+            if(maDT != null){
+                preparedStatement.setString(3, maDT);
+            }
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                String ten = rs.getString("TenSanPham");
+                String mota = rs.getString("MoTa");
+                int dongia = rs.getInt("DonGia");
+                SanPhamDoiTac dt = new SanPhamDoiTac(ten, mota,dongia);
+                list.add(dt);
+            }
+        }catch (SQLException ex) {
+            Logger.getLogger(DBController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+        
+    public static  ArrayList<ChiTietSanPhamChiNhanh> getSanPhamChiNhanh(){
+        ArrayList<ChiTietSanPhamChiNhanh> list = new ArrayList<>();
+        Connection conn = null;
+        try{
+            conn = DBConnection.getConnection();
+            Statement hd = conn.createStatement();
+            ResultSet rs = hd.executeQuery("select sp.*, ct.SoLuongConLai, ct.DonGia, cn.MaCN \n" +
+                                            "from SanPham sp, CT_SanPham_ChiNhanh ct, ChiNhanh cn\n" +
+                                            "where sp.MaSP = ct.MaSP and cn.MaCN = ct.MaCN \n" +
+                                            "and cn.MaDT='DT01'");
+            while(rs.next()){
+                String MaSP = rs.getString("MaSP");
+                String TenSp = rs.getString("TenSanPham");
+                String Mota = rs.getString("Mota");
+                int soluong = rs.getInt("SoLuongConLai");
+                int dongia = rs.getInt("DonGia");
+                String MaCN = rs.getString("MaCN");
+                
+                ChiTietSanPhamChiNhanh model = new ChiTietSanPhamChiNhanh(MaSP, TenSp, Mota, soluong, dongia, MaCN);
+                list.add(model);
+            }
+        }catch (SQLException ex) {
+            Logger.getLogger(DBController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
         return list;
     }
