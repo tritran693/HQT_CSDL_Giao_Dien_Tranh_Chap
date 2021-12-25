@@ -155,7 +155,7 @@ public class TinhTrangDH1 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Vui lòng chọn đơn hàng để sửa");
         }
         else{   
-            SuaDH suaDH = new SuaDH(this,rootPaneCheckingEnabled);
+            SuaDH1 suaDH = new SuaDH1(this,rootPaneCheckingEnabled);
             suaDH.setEditData(list.get(selectedIndex));
             suaDH.setVisible(true);
         }

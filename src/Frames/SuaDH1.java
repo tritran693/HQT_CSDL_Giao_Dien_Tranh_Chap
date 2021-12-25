@@ -16,12 +16,12 @@ public class SuaDH1 extends javax.swing.JDialog {
     /**
      * Creates new form SuaHD
      */
-    private TinhTrangDH home;
+    private TinhTrangDH1 home;
     public SuaDH1(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        home=(TinhTrangDH)parent;
+        home=(TinhTrangDH1)parent;
     }
 
     /**
