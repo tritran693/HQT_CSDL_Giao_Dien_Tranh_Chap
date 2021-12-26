@@ -53,17 +53,6 @@ public class TinhTrangDH extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         tblModel=(DefaultTableModel) tbResult.getModel();
     }
-     public void addDH(DonHang dh){
-        list.add(dh);
-        tblModel.setRowCount(0);//reset nd trong bang ve 0
-        for(DonHang donhang:list){
-            tblModel.addRow(new Object[]{donhang.getMadh(),donhang.getNgaydat(),
-            donhang.getTinhtrang(),donhang.getMatx(),donhang.getHinhthucthanhtoan(),
-            donhang.getDiachinhan(),donhang.getPhivanchuyen(),
-            donhang.getPhisanpham(),donhang.getTongtien()});
-        }
-    }
-
    
     /**
      * This method is called from within the constructor to initialize the form.

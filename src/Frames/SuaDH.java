@@ -5,6 +5,9 @@
 package Frames;
 
 import Class.DonHang;
+import DBConnection.DBConnection;
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import javax.swing.JOptionPane;
 
 /**
@@ -254,13 +257,25 @@ public class SuaDH extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String madh="",tinhtrang="";
-        
-        madh=txtMaDH.getText();
-        tinhtrang=txtTinhTrang.getText();;
-      
-        home.updateTinhTrang(tinhtrang,madh);
-        JOptionPane.showMessageDialog(rootPane, "Sửa thành công!");
+        Connection conn = null;
+        try {
+            conn = DBConnection.getConnection();
+            CallableStatement cs=conn.prepareCall("{call USP_SuaDH (?,?)}");
+            cs.setString(1, txtMaDH.getText());
+            cs.setString(2, txtTinhTrang.getText());
+            int kq=cs.executeUpdate();
+            if(kq==1)
+            {
+                JOptionPane.showMessageDialog(this, "Cập nhật thành công");
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
+            }
+            cs.close();
+            conn.close();
+        } catch (Exception e) {
+        }
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
