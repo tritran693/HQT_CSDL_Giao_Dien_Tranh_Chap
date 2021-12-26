@@ -6,6 +6,7 @@
 package Frames;
 
 import Class.DoiTac;
+import Class.SanPham;
 import Class.SanPhamDoiTac;
 import DBController.DBController;
 import java.sql.SQLException;
@@ -204,13 +205,30 @@ public class XemSanPham extends javax.swing.JFrame {
         }
         //Tạo bảng giả
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Tên sản phẩm");
-        model.addColumn("Mô tả");
-        model.addColumn("Đơn giá");
         ArrayList<SanPhamDoiTac> list = null;
         if(low + high ==0){
-            list = DBController.getSpDoiTac(idDT);
+            if(idDT == null){
+                model.addColumn("Mã sản phẩm");
+                model.addColumn("Tên sản phẩm");
+                model.addColumn("Mô tả");
+                ArrayList<SanPham> list2 = null;
+                list2 = DBController.getSp();
+                for(SanPham sp:list2){
+                    model.addRow(sp.toArray());
+                }
+                jTable1.setModel(model);
+                return;
+            }
+            else{
+                model.addColumn("Tên sản phẩm");
+                model.addColumn("Mô tả");
+                model.addColumn("Đơn giá");
+                list = DBController.getSpDoiTac(idDT);
+            }
         } else{
+            model.addColumn("Tên sản phẩm");
+            model.addColumn("Mô tả");
+            model.addColumn("Đơn giá"); 
             list = DBController.getSpDoiTac(idDT, low, high);
         }
         for(SanPhamDoiTac sp:list){

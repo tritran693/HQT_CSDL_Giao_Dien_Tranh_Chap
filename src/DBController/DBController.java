@@ -8,6 +8,7 @@ package DBController;
 import Class.ChiTietSanPhamChiNhanh;
 import Class.DoiTac;
 import Class.DonHang;
+import Class.SanPham;
 import Class.SanPhamDoiTac;
 import DBConnection.DBConnection;
 import java.sql.CallableStatement;
@@ -85,24 +86,37 @@ public class DBController {
         return list;
     }
     
-        public static ArrayList<SanPhamDoiTac> getSpDoiTac(String maDT){
+    public static ArrayList<SanPham> getSp(){
+        ArrayList<SanPham> list = new ArrayList<>();
+        Connection conn = null;
+        try{
+            conn = DBConnection.getConnection();
+            Statement hd = conn.createStatement();
+            String query = "exec DanhSachSanPham ";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                String ma = rs.getString("MaSP");
+                String ten = rs.getString("TenSanPham");
+                String mota = rs.getString("MoTa");
+                SanPham dt = new SanPham(ma, ten, mota);
+                list.add(dt);
+            }
+        }catch (SQLException ex) {
+            Logger.getLogger(DBController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    public static ArrayList<SanPhamDoiTac> getSpDoiTac(String maDT){
         ArrayList<SanPhamDoiTac> list = new ArrayList<>();
         Connection conn = null;
         try{
             conn = DBConnection.getConnection();
             Statement hd = conn.createStatement();
-            String query;
-            if(maDT == null){
-                query = "exec DanhSachSanPham null";
-            }
-            else {
-                query = "exec DanhSachSanPham ?";
-            
-            }
+            String query = "exec DanhSachSanPhamDoiTac ?";
             PreparedStatement preparedStatement = conn.prepareStatement(query);
-            if(maDT != null){
-                preparedStatement.setString(1, maDT);
-            }
+            preparedStatement.setString(1, maDT);
             ResultSet rs = preparedStatement.executeQuery();
             while(rs.next()){
                 String ten = rs.getString("TenSanPham");

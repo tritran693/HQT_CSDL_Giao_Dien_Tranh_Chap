@@ -257,7 +257,6 @@ public class DoiTacThemSanPham extends javax.swing.JFrame {
         int dongia = Integer.parseInt(dongiaString);
         
         if(DBController.DBController.insert_SP_CN(masp, tensp, mota, soluong, dongia, cn)){
-            JOptionPane.showMessageDialog(rootPane, "Thêm thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             addTable();
         }else{
             JOptionPane.showMessageDialog(rootPane, "Thêm thất bại", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
