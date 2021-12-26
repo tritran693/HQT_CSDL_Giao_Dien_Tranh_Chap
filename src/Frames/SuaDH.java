@@ -275,6 +275,7 @@ public class SuaDH extends javax.swing.JDialog {
             cs.close();
             conn.close();
         } catch (Exception e) {
+            e.printStackTrace();
         }
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
